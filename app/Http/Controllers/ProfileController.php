@@ -25,18 +25,31 @@ class ProfileController extends Controller
 
         // 1. Validate input
         $validated = $request->validate([
-            'username'     => ['required', 'string', 'max:50', 'alpha_dash',
-                               'unique:profiles,username,' . $profile->id],
-            'bio'          => ['nullable', 'string', 'max:500'],
-            'location'     => ['nullable', 'string', 'max:100'],
-            'github_url'   => ['nullable', 'url', 'max:255'],
-            'linkedin_url' => ['nullable', 'url', 'max:255'],
-        ]);
+        'username'     => ['required', 'string', 'max:50', 'alpha_dash',
+                           'unique:profiles,username,' . $profile->id],
+        'bio'          => ['nullable', 'string', 'max:500'],
+        'location'     => ['nullable', 'string', 'max:100'],
+        'github_url'   => ['nullable', 'url', 'max:255'],
+        'linkedin_url' => ['nullable', 'url', 'max:255'],
+        'avatar'       => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+    ]);
 
-        // 2. Update the profile
-        $profile->update($validated);
-
-        // 3. Redirect back with success
-        return back()->with('success', 'Profile updated successfully!');
+    // 2. Handle avatar upload
+    if ($request->hasFile('avatar')) {
+        // Delete old avatar if exists
+        if ($profile->avatar) {
+            \Storage::disk('public')->delete($profile->avatar);
+        }
+        // Store new avatar
+        $validated['avatar'] = $request->file('avatar')
+                                        ->store('avatars', 'public');
     }
+
+    // 3. Update the profile
+    $profile->update($validated);
+
+    // 4. Redirect to public portfolio
+    return redirect('/portfolio/' . $profile->username)
+           ->with('success', 'Profile updated successfully!');
+}
 }

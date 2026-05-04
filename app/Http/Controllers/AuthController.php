@@ -16,6 +16,7 @@ class AuthController extends Controller
             'name'     => ['required', 'string', 'max:100'],
             'email'    => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['nullable', 'string', 'max:50', 'alpha_dash', 'unique:profiles,username'],
         ]);
 
         $user = User::create([
@@ -24,8 +25,10 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        $username = Profile::generateUsername($validated['name']);
-
+        $username = !empty($validated['username']) 
+            ? $validated['username'] 
+            : Profile::generateUsername($validated['name']);
+            
         $user->profile()->create([
             'username' => $username,
         ]);

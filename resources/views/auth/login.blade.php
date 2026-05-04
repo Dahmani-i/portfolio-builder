@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
 
     <h2>Login</h2>
 
     @if($errors->any())
-        <ul>
-            @foreach($errors->all() as $error)
-                <li style="color:red">{{ $error }}</li>
-            @endforeach
-        </ul>
+        @foreach($errors->all() as $error)
+            <p style="color:red">{{ $error }}</p>
+        @endforeach
     @endif
 
     @if(session('success'))
@@ -22,17 +16,15 @@
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
+        <p><label>Email</label><br>
+        <input type="email" name="email" value="{{ old('email') }}"></p><br>
 
-        <label>Email</label><br>
-        <input type="email" name="email" value="{{ old('email') }}"><br><br>
-
-        <label>Password</label><br>
-        <input type="password" name="password"><br><br>
+        <p><label>Password</label><br>
+        <input type="password" name="password"></p><br>
 
         <button type="submit">Login</button>
     </form>
 
-    <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
+    <br><p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
 
-</body>
-</html>
+@endsection
