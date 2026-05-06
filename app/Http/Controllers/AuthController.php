@@ -10,45 +10,63 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Show the registration form.
+     */
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
+
+    /**
+     * Handle user registration.
+     * Creates a user account and auto-generates a profile.
+     */
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:100'],
+            'name'     => ['required', 'string', 'min:2', 'max:100'],
             'email'    => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'username' => ['nullable', 'string', 'max:50', 'alpha_dash', 'unique:profiles,username'],
+            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+            'username' => ['nullable', 'string', 'min:3', 'max:50', 'alpha_dash',
+                           'unique:profiles,username'],
         ]);
 
+        // Create the user account
         $user = User::create([
             'name'     => $validated['name'],
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
 
-        $username = !empty($validated['username']) 
-            ? $validated['username'] 
+        // Use provided username or auto-generate from name
+        $username = !empty($validated['username'])
+            ? $validated['username']
             : Profile::generateUsername($validated['name']);
-            
+
+        // Create the profile
         $user->profile()->create([
             'username' => $username,
         ]);
 
+        // Log the user in
         Auth::login($user);
 
-        return redirect('/')
-               ->with('success', 'Account created!');
+        return redirect('/portfolio/' . $username)
+               ->with('success', 'Account created! Complete your profile.');
     }
 
-    public function showRegisterForm()
-    {
-        return view('auth.register');
-    }
-
+    /**
+     * Show the login form.
+     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
+    /**
+     * Handle user login.
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -58,14 +76,14 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
-            // Get the authenticated user
+
             $user = Auth::user();
-            
+
+            // Redirect to portfolio if profile exists
             if ($user->profile) {
                 return redirect('/portfolio/' . $user->profile->username);
             }
-            
+
             return redirect('/');
         }
 
@@ -74,6 +92,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Handle user logout.
+     */
     public function logout(Request $request)
     {
         Auth::logout();

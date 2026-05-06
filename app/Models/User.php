@@ -45,9 +45,14 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
+
+    // ──────────────────────────────────────────
+    // Relationships — Module 1
+    // ──────────────────────────────────────────
+
     /**
      * Get the profile associated with the user.
      */
@@ -55,4 +60,27 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
+
+    // ──────────────────────────────────────────
+    // Relationships — Module 2 (Bakarid)
+    // ──────────────────────────────────────────
+
+    // public function projects(): HasMany
+    // {
+    //     return $this->hasMany(\App\Models\Project::class);
+    // }
+
+    // ──────────────────────────────────────────
+    // Relationships — Module 3 (Bougra)
+    // ──────────────────────────────────────────
+
+    // public function skills(): HasMany
+    // {
+    //     return $this->hasMany(\App\Models\Skill::class);
+    // }
+
+    // public function certifications(): HasMany
+    // {
+    //     return $this->hasMany(\App\Models\Certification::class);
+    // }
 }

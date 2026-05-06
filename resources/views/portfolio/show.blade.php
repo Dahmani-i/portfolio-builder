@@ -55,9 +55,34 @@
         </div>
     @endif
 
-    {{-- Placeholder for M2 and M3 --}}
-    <div style="margin-top: 20px; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); padding: 20px; color: #aaa; text-align: center;">
-        Projects, skills and certifications coming soon...
-    </div>
+    {{-- Projects section — M2 Bakarid --}}
+<div style="margin-top: 20px; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); padding: 20px;">
+    <h3 style="margin-bottom: 12px;">Projects</h3>
+    @isset($projects)
+        {{-- M2 will render projects here --}}
+    @else
+        <p style="color: #aaa;">No projects yet.</p>
+    @endisset
+</div>
+
+{{-- Skills section — M3 Bougra --}}
+<div style="margin-top: 20px; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); padding: 20px;">
+    <h3 style="margin-bottom: 12px;">Skills</h3>
+    @isset($skills)
+        {{-- M3 will render skills here --}}
+    @else
+        <p style="color: #aaa;">No skills yet.</p>
+    @endisset
+</div>
+
+{{-- Certifications section — M3 Bougra --}}
+<div style="margin-top: 20px; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); padding: 20px;">
+    <h3 style="margin-bottom: 12px;">Certifications</h3>
+    @isset($certifications)
+        {{-- M3 will render certifications here --}}
+    @else
+        <p style="color: #aaa;">No certifications yet.</p>
+    @endisset
+</div>
 
 @endsection

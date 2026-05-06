@@ -11,6 +11,9 @@ class Profile extends Model
 {
     use HasFactory;
 
+    /**
+     * Fields that can be mass assigned.
+     */
     protected $fillable = [
         'user_id',
         'username',
@@ -21,11 +24,27 @@ class Profile extends Model
         'linkedin_url',
     ];
 
+    // ──────────────────────────────────────────
+    // Relationships
+    // ──────────────────────────────────────────
+
+    /**
+     * Profile belongs to a User.
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    // ──────────────────────────────────────────
+    // Helper methods
+    // ──────────────────────────────────────────
+
+    /**
+     * Generate a unique username from a display name.
+     * Example: "John Doe" → "john-doe"
+     * If taken → "john-doe-1", "john-doe-2", etc.
+     */
     public static function generateUsername(string $name): string
     {
         $base     = Str::slug($name);
