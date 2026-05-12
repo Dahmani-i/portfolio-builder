@@ -15,13 +15,16 @@
             </div>
         @else
             <div style="margin-top: 30px;">
-                <a href="{{ route('register') }}">
-                    <button type="button">Get started</button>
-                </a>
-                &nbsp;&nbsp;
-                <a href="{{ route('login') }}">
-                    <button type="button">Login</button>
-                </a>
+                <a href="{{ route('register') }}" style="
+                    display: inline-block;
+                    padding: 12px 28px;
+                    background-color: #2d2d2d;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    font-size: 16px;
+                    font-weight: bold;
+                ">Get started</a>
             </div>
         @endauth
 
